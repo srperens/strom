@@ -13,7 +13,9 @@ const NODE_TYPE_FONT_SIZE: f32 = 13.0;
 /// Font size for custom node name labels (user-assigned names).
 const NODE_NAME_FONT_SIZE: f32 = 15.0;
 /// Vertical offset for the custom name label below the type label.
-const NODE_NAME_Y_OFFSET: f32 = 28.0;
+const NODE_NAME_Y_OFFSET: f32 = 32.0;
+/// Maximum characters displayed for a custom node name.
+const NODE_NAME_MAX_CHARS: usize = 20;
 
 /// Draw a custom name label (italic, centered) below the type label on a node.
 fn draw_node_name(painter: &egui::Painter, ui: &Ui, name: &str, rect: Rect, zoom: f32) {
@@ -22,8 +24,14 @@ fn draw_node_name(painter: &egui::Painter, ui: &Ui, name: &str, rect: Rect, zoom
     } else {
         Color32::from_gray(100)
     };
+    let display_name = if name.chars().count() > NODE_NAME_MAX_CHARS {
+        let truncated: String = name.chars().take(NODE_NAME_MAX_CHARS - 1).collect();
+        format!("{truncated}\u{2026}")
+    } else {
+        name.to_owned()
+    };
     let mut job = LayoutJob::simple_singleline(
-        name.to_owned(),
+        display_name,
         FontId::proportional(NODE_NAME_FONT_SIZE * zoom),
         name_color,
     );
