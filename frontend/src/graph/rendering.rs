@@ -12,6 +12,29 @@ use super::*;
 const NODE_TYPE_FONT_SIZE: f32 = 13.0;
 /// Font size for custom node name labels (user-assigned names).
 const NODE_NAME_FONT_SIZE: f32 = 15.0;
+/// Vertical offset for the custom name label below the type label.
+const NODE_NAME_Y_OFFSET: f32 = 28.0;
+
+/// Draw a custom name label (italic, centered) below the type label on a node.
+fn draw_node_name(painter: &egui::Painter, ui: &Ui, name: &str, rect: Rect, zoom: f32) {
+    let name_color = if ui.visuals().dark_mode {
+        Color32::from_gray(180)
+    } else {
+        Color32::from_gray(100)
+    };
+    let mut job = LayoutJob::simple_singleline(
+        name.to_owned(),
+        FontId::proportional(NODE_NAME_FONT_SIZE * zoom),
+        name_color,
+    );
+    job.sections
+        .iter_mut()
+        .for_each(|s| s.format.italics = true);
+    let galley = painter.layout_job(job);
+    let name_x = rect.center().x - galley.size().x / 2.0;
+    let name_pos = pos2(name_x, rect.min.y + NODE_NAME_Y_OFFSET * zoom);
+    painter.galley(name_pos, galley, Color32::TRANSPARENT);
+}
 
 impl GraphEditor {
     /// Center the view on the currently selected element or block.
@@ -821,23 +844,7 @@ impl GraphEditor {
         // Draw custom name (from GStreamer "name" property) below element type
         if let Some(PropertyValue::String(custom_name)) = element.properties.get("name") {
             if !custom_name.is_empty() {
-                let name_color = if ui.visuals().dark_mode {
-                    Color32::from_gray(180)
-                } else {
-                    Color32::from_gray(100)
-                };
-                let mut job = LayoutJob::simple_singleline(
-                    custom_name.clone(),
-                    FontId::proportional(NODE_NAME_FONT_SIZE * self.zoom),
-                    name_color,
-                );
-                job.sections
-                    .iter_mut()
-                    .for_each(|s| s.format.italics = true);
-                let galley = painter.layout_job(job);
-                let name_x = rect.center().x - galley.size().x / 2.0;
-                let name_pos = pos2(name_x, rect.min.y + 28.0 * self.zoom);
-                painter.galley(name_pos, galley, Color32::TRANSPARENT);
+                draw_node_name(painter, ui, custom_name, rect, self.zoom);
             }
         }
 
@@ -1353,23 +1360,7 @@ impl GraphEditor {
         // Draw custom instance name below block type name
         if let Some(custom_name) = &block.name {
             if !custom_name.is_empty() {
-                let name_color = if ui.visuals().dark_mode {
-                    Color32::from_gray(180)
-                } else {
-                    Color32::from_gray(100)
-                };
-                let mut job = LayoutJob::simple_singleline(
-                    custom_name.clone(),
-                    FontId::proportional(NODE_NAME_FONT_SIZE * self.zoom),
-                    name_color,
-                );
-                job.sections
-                    .iter_mut()
-                    .for_each(|s| s.format.italics = true);
-                let galley = painter.layout_job(job);
-                let name_x = rect.center().x - galley.size().x / 2.0;
-                let name_pos = pos2(name_x, rect.min.y + 28.0 * self.zoom);
-                painter.galley(name_pos, galley, Color32::TRANSPARENT);
+                draw_node_name(painter, ui, custom_name, rect, self.zoom);
             }
         }
 
