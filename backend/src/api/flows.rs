@@ -1362,6 +1362,42 @@ pub async fn trigger_transition(
     }))
 }
 
+/// Reset accumulated loudness measurements on an EBU R128 meter block.
+#[utoipa::path(
+    post,
+    path = "/api/flows/{flow_id}/blocks/{block_id}/loudness/reset",
+    tag = "flows",
+    params(
+        ("flow_id" = String, Path, description = "Flow ID (UUID)"),
+        ("block_id" = String, Path, description = "Block instance ID")
+    ),
+    responses(
+        (status = 204, description = "Loudness measurements reset"),
+        (status = 400, description = "Failed to reset", body = ErrorResponse),
+        (status = 404, description = "Flow not running or block not found", body = ErrorResponse)
+    )
+)]
+pub async fn reset_loudness(
+    State(state): State<AppState>,
+    Path((flow_id, block_id)): Path<(FlowId, String)>,
+) -> Result<StatusCode, (StatusCode, Json<ErrorResponse>)> {
+    state
+        .reset_loudness(&flow_id, &block_id)
+        .await
+        .map_err(|e| {
+            error!("Failed to reset loudness: {}", e);
+            (
+                StatusCode::BAD_REQUEST,
+                Json(ErrorResponse::with_details(
+                    "Failed to reset loudness",
+                    e.to_string(),
+                )),
+            )
+        })?;
+
+    Ok(StatusCode::NO_CONTENT)
+}
+
 /// Animate a single input's position and/or size.
 ///
 /// Smoothly animates the specified input from its current position/size

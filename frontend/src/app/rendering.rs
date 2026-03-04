@@ -1274,6 +1274,7 @@ impl StromApp {
                             flow_id,
                             &self.meter_data,
                             &self.spectrum_data,
+                            &self.loudness_data,
                             &self.latency_data,
                             &self.webrtc_stats,
                             rtp_stats,
@@ -1408,6 +1409,16 @@ impl StromApp {
                             } else {
                                 self.qr_inline = Some((block_id.clone(), ingest_url));
                             }
+                        }
+
+                        // Handle loudness reset request
+                        if let Some((flow_id, block_id)) = result.loudness_reset_requested {
+                            let api = self.api.clone();
+                            spawn_task(async move {
+                                if let Err(e) = api.reset_loudness(&flow_id, &block_id).await {
+                                    tracing::warn!("Failed to reset loudness: {}", e);
+                                }
+                            });
                         }
                     } else {
                         ui.label("Block definition not found");
@@ -1556,6 +1567,32 @@ impl StromApp {
                                     additional_height,
                                     render_callback: Some(Box::new(move |ui, _rect| {
                                         crate::spectrum::show_compact(ui, &spectrum_data_clone);
+                                    })),
+                                },
+                            );
+                        }
+                    }
+
+                    // Setup dynamic content for loudness blocks
+                    let loudness_blocks: Vec<_> = self
+                        .graph
+                        .blocks
+                        .iter()
+                        .filter(|b| b.block_definition_id == "builtin.loudness")
+                        .map(|b| b.id.clone())
+                        .collect();
+
+                    for block_id in loudness_blocks {
+                        if let Some(loudness_data) = self.loudness_data.get(&flow_id, &block_id) {
+                            let loudness_data_clone = loudness_data.clone();
+                            let height = crate::loudness::calculate_compact_height();
+
+                            self.graph.set_block_content(
+                                block_id,
+                                crate::graph::BlockContentInfo {
+                                    additional_height: height + 10.0,
+                                    render_callback: Some(Box::new(move |ui, _rect| {
+                                        crate::loudness::show_compact(ui, &loudness_data_clone);
                                     })),
                                 },
                             );
