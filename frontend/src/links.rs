@@ -161,7 +161,10 @@ impl LinksPage {
 
                 let ingest_url = format!("{}/player/whip-ingest", server_base);
                 ui.horizontal(|ui| {
-                    if ui.small_button("Open").clicked() {
+                    if ui
+                        .small_button(egui_phosphor::regular::ARROW_SQUARE_OUT)
+                        .clicked()
+                    {
                         ctx.open_url(egui::OpenUrl::new_tab(&ingest_url));
                     }
                     if ui.small_button(egui_phosphor::regular::COPY).clicked() {
@@ -200,7 +203,10 @@ impl LinksPage {
 
                 let streams_url = format!("{}/player/whep-streams", server_base);
                 ui.horizontal(|ui| {
-                    if ui.small_button("Open").clicked() {
+                    if ui
+                        .small_button(egui_phosphor::regular::ARROW_SQUARE_OUT)
+                        .clicked()
+                    {
                         ctx.open_url(egui::OpenUrl::new_tab(&streams_url));
                     }
                     if ui.small_button(egui_phosphor::regular::COPY).clicked() {
@@ -420,7 +426,10 @@ impl LinksPage {
                 // Swagger UI
                 let swagger_url = format!("{}/swagger-ui/", server_base);
                 ui.horizontal(|ui| {
-                    if ui.small_button("Open").clicked() {
+                    if ui
+                        .small_button(egui_phosphor::regular::ARROW_SQUARE_OUT)
+                        .clicked()
+                    {
                         ctx.open_url(egui::OpenUrl::new_tab(&swagger_url));
                     }
                     if ui.small_button(egui_phosphor::regular::COPY).clicked() {
@@ -440,7 +449,10 @@ impl LinksPage {
                 // OpenAPI spec
                 let openapi_url = format!("{}/api-docs/openapi.json", server_base);
                 ui.horizontal(|ui| {
-                    if ui.small_button("Open").clicked() {
+                    if ui
+                        .small_button(egui_phosphor::regular::ARROW_SQUARE_OUT)
+                        .clicked()
+                    {
                         ctx.open_url(egui::OpenUrl::new_tab(&openapi_url));
                     }
                     if ui.small_button(egui_phosphor::regular::COPY).clicked() {
@@ -468,7 +480,10 @@ impl LinksPage {
                 // Flows API
                 let flows_api = format!("{}/api/flows", server_base);
                 ui.horizontal(|ui| {
-                    if ui.small_button("Open").clicked() {
+                    if ui
+                        .small_button(egui_phosphor::regular::ARROW_SQUARE_OUT)
+                        .clicked()
+                    {
                         ctx.open_url(egui::OpenUrl::new_tab(&flows_api));
                     }
                     if ui.small_button(egui_phosphor::regular::COPY).clicked() {
@@ -488,7 +503,10 @@ impl LinksPage {
                 // WHEP streams API
                 let streams_api = format!("{}/api/whep-streams", server_base);
                 ui.horizontal(|ui| {
-                    if ui.small_button("Open").clicked() {
+                    if ui
+                        .small_button(egui_phosphor::regular::ARROW_SQUARE_OUT)
+                        .clicked()
+                    {
                         ctx.open_url(egui::OpenUrl::new_tab(&streams_api));
                     }
                     if ui.small_button(egui_phosphor::regular::COPY).clicked() {
@@ -508,7 +526,10 @@ impl LinksPage {
                 // Version API
                 let version_api = format!("{}/api/version", server_base);
                 ui.horizontal(|ui| {
-                    if ui.small_button("Open").clicked() {
+                    if ui
+                        .small_button(egui_phosphor::regular::ARROW_SQUARE_OUT)
+                        .clicked()
+                    {
                         ctx.open_url(egui::OpenUrl::new_tab(&version_api));
                     }
                     if ui.small_button(egui_phosphor::regular::COPY).clicked() {
@@ -528,7 +549,10 @@ impl LinksPage {
                 // Blocks API
                 let blocks_api = format!("{}/api/blocks", server_base);
                 ui.horizontal(|ui| {
-                    if ui.small_button("Open").clicked() {
+                    if ui
+                        .small_button(egui_phosphor::regular::ARROW_SQUARE_OUT)
+                        .clicked()
+                    {
                         ctx.open_url(egui::OpenUrl::new_tab(&blocks_api));
                     }
                     if ui.small_button(egui_phosphor::regular::COPY).clicked() {
@@ -548,7 +572,10 @@ impl LinksPage {
                 // Elements API
                 let elements_api = format!("{}/api/elements", server_base);
                 ui.horizontal(|ui| {
-                    if ui.small_button("Open").clicked() {
+                    if ui
+                        .small_button(egui_phosphor::regular::ARROW_SQUARE_OUT)
+                        .clicked()
+                    {
                         ctx.open_url(egui::OpenUrl::new_tab(&elements_api));
                     }
                     if ui.small_button(egui_phosphor::regular::COPY).clicked() {

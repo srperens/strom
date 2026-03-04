@@ -545,7 +545,7 @@ impl PropertyInspector {
                             result.show_qr_whep = Some(endpoint_id.clone());
                         }
                         if ui
-                            .button("▶ Open Player")
+                            .button(format!("{} Player", egui_phosphor::regular::ARROW_SQUARE_OUT))
                             .on_hover_text("Open WHEP player in browser")
                             .clicked()
                         {
@@ -574,7 +574,7 @@ impl PropertyInspector {
                 } else {
                     // Flow not running, show disabled button with tooltip
                     ui.add_enabled_ui(false, |ui| {
-                        ui.button("▶ Open Player")
+                        ui.button(format!("{} Player", egui_phosphor::regular::ARROW_SQUARE_OUT))
                             .on_hover_text("Start the flow to enable player")
                             .on_disabled_hover_text("Start the flow to enable player");
                     });
@@ -604,7 +604,7 @@ impl PropertyInspector {
                             result.show_qr_whip = Some(endpoint_id.clone());
                         }
                         if ui
-                            .button("▶ Open Ingest Page")
+                            .button(format!("{} Ingest", egui_phosphor::regular::ARROW_SQUARE_OUT))
                             .on_hover_text("Open WHIP ingest page in browser")
                             .clicked()
                         {
@@ -632,7 +632,7 @@ impl PropertyInspector {
                     }
                 } else {
                     ui.add_enabled_ui(false, |ui| {
-                        ui.button("▶ Open Ingest Page")
+                        ui.button(format!("{} Ingest", egui_phosphor::regular::ARROW_SQUARE_OUT))
                             .on_hover_text("Start the flow to enable ingest page")
                             .on_disabled_hover_text("Start the flow to enable ingest page");
                     });

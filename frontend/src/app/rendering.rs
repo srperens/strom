@@ -75,7 +75,10 @@ impl StromApp {
                     #[cfg(not(target_arch = "wasm32"))]
                     {
                         if ui
-                            .button("Open Web GUI")
+                            .button(format!(
+                                "{} Web GUI",
+                                egui_phosphor::regular::ARROW_SQUARE_OUT
+                            ))
                             .on_hover_text("Open the web interface in your browser")
                             .clicked()
                         {
