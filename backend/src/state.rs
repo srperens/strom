@@ -1216,6 +1216,23 @@ impl AppState {
         Ok(())
     }
 
+    /// Reset accumulated loudness measurements on an EBU R128 meter block.
+    pub async fn reset_loudness(
+        &self,
+        flow_id: &FlowId,
+        block_id: &str,
+    ) -> Result<(), PipelineError> {
+        let pipelines = self.inner.pipelines.read().await;
+
+        let manager = pipelines.get(flow_id).ok_or_else(|| {
+            PipelineError::InvalidFlow(format!("Pipeline not running for flow: {}", flow_id))
+        })?;
+
+        manager.reset_loudness(block_id)?;
+
+        Ok(())
+    }
+
     /// Animate a single input's position/size on a compositor block.
     #[allow(clippy::too_many_arguments)]
     pub async fn animate_input(

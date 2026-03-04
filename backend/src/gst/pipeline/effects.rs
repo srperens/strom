@@ -128,6 +128,18 @@ impl PipelineManager {
         Ok(())
     }
 
+    /// Reset accumulated loudness measurements on an EBU R128 meter block.
+    pub fn reset_loudness(&self, block_instance_id: &str) -> Result<(), PipelineError> {
+        let element_id = format!("{}:ebur128level", block_instance_id);
+        let element = self
+            .elements
+            .get(&element_id)
+            .ok_or_else(|| PipelineError::ElementNotFound(element_id.clone()))?;
+        element.emit_by_name::<()>("reset", &[]);
+        info!("Reset loudness measurements on {}", block_instance_id);
+        Ok(())
+    }
+
     /// Capture a thumbnail from a compositor input.
     ///
     /// Captures a single frame from the queue element feeding the specified

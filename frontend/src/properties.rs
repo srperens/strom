@@ -5,7 +5,7 @@ use egui::{Color32, ScrollArea, Ui};
 use strom_types::{
     block::{EnumValue, ExposedProperty, DEFAULT_SRT_OUTPUT_URI},
     element::{ElementInfo, PropertyInfo, PropertyType},
-    BlockDefinition, BlockInstance, Element, PropertyValue,
+    BlockDefinition, BlockInstance, Element, FlowId, PropertyValue,
 };
 
 /// Result from showing the block property inspector.
@@ -34,6 +34,8 @@ pub struct BlockInspectorResult {
     pub show_qr_whep: Option<String>,
     /// Show QR code for WHIP ingest URL - contains endpoint_id
     pub show_qr_whip: Option<String>,
+    /// Loudness reset requested - contains (flow_id, block_id)
+    pub loudness_reset_requested: Option<(FlowId, String)>,
 }
 
 /// Property inspector panel.
@@ -741,6 +743,10 @@ impl PropertyInspector {
                     if definition.id == "builtin.loudness" {
                         ui.separator();
                         if let Some(flow_id) = flow_id {
+                            if ui.button("Reset Measurements").clicked() {
+                                result.loudness_reset_requested =
+                                    Some((flow_id, block.id.clone()));
+                            }
                             if let Some(loudness_data) = loudness_data_store.get(&flow_id, &block.id) {
                                 crate::loudness::show_full(ui, loudness_data);
                             } else {

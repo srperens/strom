@@ -1410,6 +1410,16 @@ impl StromApp {
                                 self.qr_inline = Some((block_id.clone(), ingest_url));
                             }
                         }
+
+                        // Handle loudness reset request
+                        if let Some((flow_id, block_id)) = result.loudness_reset_requested {
+                            let api = self.api.clone();
+                            spawn_task(async move {
+                                if let Err(e) = api.reset_loudness(&flow_id, &block_id).await {
+                                    tracing::warn!("Failed to reset loudness: {}", e);
+                                }
+                            });
+                        }
                     } else {
                         ui.label("Block definition not found");
                     }
